@@ -111,19 +111,23 @@ var Population = function(obj) {
     that.begin = function() {
         var count = 0;
         var lastBest = that.container[0];
-        while (that.container.length > 0 && lastBest.gene !== target && count < 400) {
-            mate(mateRate);
-            // select(that.container);
-            sort();
-            // die();
-            onChange(that);
-            if (fitness(lastBest) == fitness(that.container[0])) count ++;
-            else {
-                lastBest = that.container[0];
-                count = 0;
+        var clock = setInterval(function(){
+            if (that.container.length > 0 && lastBest.gene !== target && count < 400) {
+                mate(mateRate);
+                // select(that.container);
+                sort();
+                // die();
+                onChange(that);
+                if (fitness(lastBest) == fitness(that.container[0])) count ++;
+                else {
+                    lastBest = that.container[0];
+                    count = 0;
+                }
+            } else {
+                clearInterval(clock);
+                onEnd(that);
             }
-        }
-        onEnd(that);
+        }, 0);
     };
 
     that.getBest = function() {
@@ -150,7 +154,7 @@ var Individual = function(obj) {
 
         // chromosomal drift
         var i = Math.floor(Math.random()*gene.length)
-        return replaceAt(gene, i, String.fromCharCode(gene.charCodeAt(i) + (Math.floor(Math.random()*2) ? 10 : -10)));
+        return replaceAt(gene, i, String.fromCharCode(gene.charCodeAt(i) + (Math.floor(Math.random()*2) ? 1 : -1)));
 
         // var newGene = "";
         // for (var i = 0; i < gene.length; i ++) {

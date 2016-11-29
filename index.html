@@ -14,14 +14,22 @@
             mateRate: 0.5,
             diedRate: 0.2
         };
+        
         var begin = function() {
             var data = way.get('data');
             var args = data.arguments;
+            var box = document.getElementsByClassName('box')[0];
+            var ul = box.children[0];
+            ul.remove();
+            ul = document.createElement('ul');
+            box.appendChild(ul);
             var arguments = {
                 onChange: function (population) {
                     var idv = population.getBest();
-                    console.log(idv);
-                    way.set('data.res', idv);
+                    var li = document.createElement('li');
+                    li.innerHTML = idv.gene;
+                    var gene = ul.firstChild;
+                    ul.insertBefore(li, gene);
                 },
                 onEnd: function(population) {
                     if (population.container.length == 0) alert('死光了!');
@@ -56,10 +64,12 @@
             <div>死亡率: <input type="text" name="diedRate"></div>
             <div><input type="button" id="begin" value="开始"></div>
         </form>
-
-        <ul way-scope="res">
-            <li way-data="gene"></li>
-        </ul>
+        
+        <h2>进化过程</h2>
+        <div class="box">
+            <ul class="results">
+            </ul>
+        </div>
     </div>
 </body>
 </html>
