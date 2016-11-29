@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>遗传算法</title>
+
+    <script type="text/javascript" src="js/helloWorld.js"></script>
+    <script type="text/javascript" src="lib/way.min.js"></script>
+    <script type="text/javascript">
+        var args = {
+            target: "hello,world!",
+            size: 100,
+            mutateRate: 0.03,
+            mateRate: 0.5,
+            diedRate: 0.2
+        };
+        var begin = function() {
+            var data = way.get('data');
+            var args = data.arguments;
+            var arguments = {
+                onChange: function (population) {
+                    var idv = population.getBest();
+                    console.log(idv);
+                    way.set('data.res', idv);
+                },
+                onEnd: function(population) {
+                    if (population.container.length == 0) alert('死光了!');
+                    console.log(population);
+                },
+                size: args.size,
+                target: args.target,
+                mutateRate: parseFloat(args.mutateRate),
+                mateRate: parseFloat(args.mateRate),
+                diedRate: parseFloat(args.diedRate)
+            };
+            var p = new Population(arguments);
+            p.begin();
+        };
+
+        document.onreadystatechange = function() {
+            if (document.readyState === 'complete') {
+                document.getElementById("begin").addEventListener('click', begin);
+                way.set('data.arguments', args);
+            }
+        };
+
+    </script>
+</head>
+<body>
+    <div way-scope="data">
+        <form way-data="arguments" way-persistent="true">
+            <div>目标: <input type="text" name="target"></div>
+            <div>种群起始数量: <input type="text" name="size"></div>
+            <div>变异率: <input type="text" name="mutateRate"></div>
+            <div>交配率: <input type="text" name="mateRate"></div>
+            <div>死亡率: <input type="text" name="diedRate"></div>
+            <div><input type="button" id="begin" value="开始"></div>
+        </form>
+
+        <ul way-scope="res">
+            <li way-data="gene"></li>
+        </ul>
+    </div>
+</body>
+</html>
